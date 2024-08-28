@@ -1,12 +1,12 @@
-# Blum minigame Autocliker
-## Автокликер для мини игры Blum в телеграме
+# Blum Autoclick Modified
 
-### Скрипт собирает автоматически все зеленые шарики, пропуская бомбы и заморозки
+# VENV
 
-<b>Присутствует выбор желаемого кол-во шариков</b>
+(For 1st time)
+python -m venv venv
 
-<b>Автоматическое начало игры</b>
+(For windows)
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+venv\Scripts\activate
 
-<b>После запуска мини игры нажимайте клавишу "ё" на клавиатуре (вкл/выкл)</b>
-
-![video](https://github.com/ndkwa/blum-autocliker/blob/main/src/gif-3.gif)
+pip install -r requirements.txt
