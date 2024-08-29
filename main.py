@@ -115,7 +115,7 @@ class AutoClicker:
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -140, 0)  # Scroll down
         time.sleep(0.5)  # Wait for the scroll action to take effect
 
-    def random_wait(self, min_seconds=5, max_seconds=30):
+    def random_wait(self, min_seconds=5, max_seconds=10):
         """
         Sleep for a random duration between min_seconds and max_seconds.
 
@@ -124,8 +124,8 @@ class AutoClicker:
             max_seconds (int): Maximum number of seconds to wait.
         """
         wait_time = random.uniform(min_seconds, max_seconds)
-        time.sleep(wait_time)
         print(f"Slept for {wait_time:.2f} seconds.")
+        time.sleep(wait_time)
 
     def find_and_click_image(self, template_gray, screen, monitor):
         screen_gray = cv2.cvtColor(screen, cv2.COLOR_BGRA2GRAY)
@@ -156,6 +156,12 @@ class AutoClicker:
             return
         print(windows[0])
         window = windows[0]
+        for w in windows:
+            if w.left > 0:
+                window = w
+                break
+        
+        print(window)
         if window.isMinimized:
             window.restore() # Restore the window if it is minimized.
         window.activate()
@@ -206,7 +212,7 @@ class AutoClicker:
                             self.logger.log(f'Clicked at: {cX} {cY}')
                             self.clicked_points.append((cX, cY))
 
-                    time.sleep(0.24)
+                    time.sleep(0.222)
                     self.iteration_count += 1
                     if self.iteration_count >= 5:
                         self.clicked_points.clear()
