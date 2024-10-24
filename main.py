@@ -124,7 +124,7 @@ class AutoClicker:
             max_seconds (int): Maximum number of seconds to wait.
         """
         wait_time = random.uniform(min_seconds, max_seconds)
-        print(f"Slept for {wait_time:.2f} seconds.")
+        print(f"Wait for {wait_time:.2f} seconds.")
         time.sleep(wait_time)
 
     def find_and_click_image(self, template_gray, screen, monitor):
@@ -142,7 +142,7 @@ class AutoClicker:
             return True
         else:
             is_lobby_screen = self.is_lobby_screen(screen, )
-            print(f"is_lobby_screen : {is_lobby_screen}")
+            # print(f"is_lobby_screen : {is_lobby_screen}")
             if is_lobby_screen:
                 self.scroll_down(monitor)
 
@@ -154,14 +154,14 @@ class AutoClicker:
             self.logger.log(
                 f"No window found with title: {self.window_title}. Open the Blum web application and restart the script")
             return
-        print(windows[0])
+        # print(windows[0])
         window = windows[0]
         for w in windows:
             if w.left > 0:
                 window = w
                 break
         
-        print(window)
+        # print(window)
         if window.isMinimized:
             window.restore() # Restore the window if it is minimized.
         window.activate()
@@ -223,7 +223,7 @@ class AutoClicker:
 
 
 if __name__ == "__main__":
-    logger = Logger("[https://t.me/scriptblum]")
+    logger = Logger("[Blum auto bot...]")
     logger.log("Welcome to the free script - autoclicker for the game Blum")
     CLICK_IMAGES = [resource_path("media\\lobby-play.png"), resource_path("media\\continue-play.png")]
     LOBBY_IMAGE = resource_path("media\\farming-lobby.png")
