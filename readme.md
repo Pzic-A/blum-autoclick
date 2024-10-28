@@ -17,24 +17,35 @@ To verify the installation, open a terminal or command prompt and run:
 
 ```bash
 python --version
+```
 
 
 ### 2. Clone the Repository
+```bash
 git clone https://github.com/winrhcp/blum-autoclick.git
 cd blum-autoclick
+```
 
 
 # Setting Up the Virtual Environment
 
 (For 1st time)
+```bash
 python -m venv venv
+```
 
 (For windows)
+```bash
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 venv\Scripts\activate
+```
 
+```bash
 pip install -r requirements.txt
+```
 
 
 ### RUN
+```bash
 python main.py
+```
