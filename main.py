@@ -166,6 +166,10 @@ class AutoClicker:
             window.restore() # Restore the window if it is minimized.
         window.activate()
 
+        # Load the target image for template matching
+        target_image = cv2.imread(DOGS_IMAGE, cv2.IMREAD_COLOR)
+        target_height, target_width = target_image.shape[:2]
+
         with mss.mss() as sct:
             grave_key_code = 41
             keyboard.add_hotkey(grave_key_code, self.toggle_script)
@@ -212,6 +216,28 @@ class AutoClicker:
                             self.logger.log(f'Clicked at: {cX} {cY}')
                             self.clicked_points.append((cX, cY))
 
+                   # Prepare scaled templates only once
+                    scale_factors = np.linspace(1, 2, 5)  # Adjust number of scales as needed
+                    resized_targets = {scale: cv2.resize(target_image, (int(target_width * scale), int(target_height * scale))) for scale in scale_factors}
+                    threshold = 0.7  # Adjust threshold if needed
+
+                    for scale, resized_target in resized_targets.items():
+                        result = cv2.matchTemplate(img_bgr, resized_target, cv2.TM_CCOEFF_NORMED)
+                        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+
+                        if max_val >= threshold:
+                            click_x = max_loc[0] + resized_target.shape[1] // 2 + monitor["left"]
+                            click_y = max_loc[1] + resized_target.shape[0] // 2 + monitor["top"]
+
+                            # Adjust `click_y` downward based on scale
+                            downward_offset = int((scale - 1.0) * target_height * 0.1)
+                            click_y += downward_offset
+
+                            self.click_at(click_x, click_y)
+                            self.logger.log(f'Clicked on template at: {click_x}, {click_y}, scale: {scale:.2f}')
+                            self.clicked_points.append((click_x, click_y))
+                            break  # Stop after the first successful match
+
                     time.sleep(0.222)
                     self.iteration_count += 1
                     if self.iteration_count >= 5:
@@ -227,6 +253,7 @@ if __name__ == "__main__":
     logger.log("Welcome to the free script - autoclicker for the game Blum")
     CLICK_IMAGES = [resource_path("media\\lobby-play.png"), resource_path("media\\continue-play.png")]
     LOBBY_IMAGE = resource_path("media\\farming-lobby.png")
+    DOGS_IMAGE = resource_path("media\\dogs.png")
 
     PERCENTAGES = {
         "1": 0.13,  # 100
