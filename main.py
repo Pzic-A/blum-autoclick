@@ -215,28 +215,29 @@ class AutoClicker:
                             self.click_at(cX, cY)
                             self.logger.log(f'Clicked at: {cX} {cY}')
                             self.clicked_points.append((cX, cY))
+                    enabled_dogs = False
+                    if enabled_dogs:
+                        # Prepare scaled templates only once
+                        scale_factors = np.linspace(1, 2, 5)  # Adjust number of scales as needed
+                        resized_targets = {scale: cv2.resize(target_image, (int(target_width * scale), int(target_height * scale))) for scale in scale_factors}
+                        threshold = 0.7  # Adjust threshold if needed
 
-                   # Prepare scaled templates only once
-                    scale_factors = np.linspace(1, 2, 5)  # Adjust number of scales as needed
-                    resized_targets = {scale: cv2.resize(target_image, (int(target_width * scale), int(target_height * scale))) for scale in scale_factors}
-                    threshold = 0.7  # Adjust threshold if needed
+                        for scale, resized_target in resized_targets.items():
+                            result = cv2.matchTemplate(img_bgr, resized_target, cv2.TM_CCOEFF_NORMED)
+                            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
-                    for scale, resized_target in resized_targets.items():
-                        result = cv2.matchTemplate(img_bgr, resized_target, cv2.TM_CCOEFF_NORMED)
-                        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                            if max_val >= threshold:
+                                click_x = max_loc[0] + resized_target.shape[1] // 2 + monitor["left"]
+                                click_y = max_loc[1] + resized_target.shape[0] // 2 + monitor["top"]
 
-                        if max_val >= threshold:
-                            click_x = max_loc[0] + resized_target.shape[1] // 2 + monitor["left"]
-                            click_y = max_loc[1] + resized_target.shape[0] // 2 + monitor["top"]
+                                # Adjust `click_y` downward based on scale
+                                downward_offset = int((scale - 1.0) * target_height * 0.1)
+                                click_y += downward_offset
 
-                            # Adjust `click_y` downward based on scale
-                            downward_offset = int((scale - 1.0) * target_height * 0.1)
-                            click_y += downward_offset
-
-                            self.click_at(click_x, click_y)
-                            self.logger.log(f'Clicked on template at: {click_x}, {click_y}, scale: {scale:.2f}')
-                            self.clicked_points.append((click_x, click_y))
-                            break  # Stop after the first successful match
+                                self.click_at(click_x, click_y)
+                                self.logger.log(f'Clicked on template at: {click_x}, {click_y}, scale: {scale:.2f}')
+                                self.clicked_points.append((click_x, click_y))
+                                break  # Stop after the first successful match
 
                     time.sleep(0.222)
                     self.iteration_count += 1
@@ -286,8 +287,10 @@ if __name__ == "__main__":
     is_continue = answer
 
     logger.log('After starting the mini-game, press the "`" key on the keyboard')
-    target_colors_hex = ["#c9e100", "#bae70e"]
-    nearby_colors_hex = ["#abff61", "#87ff27"]
+    # target_colors_hex = ["#c9e100", "#bae70e", "#da7d3f"]
+    # nearby_colors_hex = ["#abff61", "#87ff27", "#60402d"]
+    target_colors_hex = ["#da7d3f", "#e47d37", "#e27a34", "#e37a33"]
+    nearby_colors_hex = ["#c25f27", "#60402d", "#c6642f", "#c46229"]
     auto_clicker = AutoClicker("TelegramDesktop", target_colors_hex, nearby_colors_hex, logger, percentages=percentages,
                                is_continue=is_continue)
     try:
