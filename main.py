@@ -287,10 +287,8 @@ if __name__ == "__main__":
     is_continue = answer
 
     logger.log('After starting the mini-game, press the "`" key on the keyboard')
-    # target_colors_hex = ["#c9e100", "#bae70e", "#da7d3f"]
-    # nearby_colors_hex = ["#abff61", "#87ff27", "#60402d"]
-    target_colors_hex = ["#da7d3f", "#e47d37", "#e27a34", "#e37a33"]
-    nearby_colors_hex = ["#c25f27", "#60402d", "#c6642f", "#c46229"]
+    target_colors_hex = ["#c9e100", "#bae70e", "#da7d3f"]
+    nearby_colors_hex = ["#abff61", "#87ff27", "#60402d"]
     auto_clicker = AutoClicker("TelegramDesktop", target_colors_hex, nearby_colors_hex, logger, percentages=percentages,
                                is_continue=is_continue)
     try:
