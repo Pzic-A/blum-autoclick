@@ -115,7 +115,7 @@ class AutoClicker:
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -140, 0)  # Scroll down
         time.sleep(0.5)  # Wait for the scroll action to take effect
 
-    def random_wait(self, min_seconds=5, max_seconds=10):
+    def random_wait(self, min_seconds=2, max_seconds=10):
         """
         Sleep for a random duration between min_seconds and max_seconds.
 
